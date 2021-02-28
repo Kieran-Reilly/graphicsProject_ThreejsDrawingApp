@@ -10,13 +10,11 @@ export function initialize(cameraPosition, rendererParameters, lightProperties, 
     const right = rect.width / 2;
     const top = rect.height / 2;
     const bottom = -rect.height / 2;
-    console.log("left", left, "right", right, "top", top, "bottom", bottom);
 
     const result = {
         scene: new Scene(),
         light: new DirectionalLight(lightProperties.color, lightProperties.intensity),
         ambient: new AmbientLight(0x404040),
-        // camera: new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000),
         camera: new OrthographicCamera(left, right, top, bottom, 0.1, 1000),
         renderer: new WebGLRenderer(rendererParameters)
     }

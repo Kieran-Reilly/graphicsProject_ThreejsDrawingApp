@@ -5,9 +5,6 @@ import {Mesh} from "/node_modules/three/src/objects/Mesh.js";
 export class Particle {
     constructor(sceneObj, x, y, colour) {
         this.scene = sceneObj;
-        //TODO: The below needs to be more accurate
-        // this.x = x <= this.scene.camera.right ? x - this.scene.camera.right + 5 : x + this.scene.camera.left + 25;
-        // this.y = y <= this.scene.camera.top ? this.scene.camera.top - y - 5 : -y + this.scene.camera.top - 35;
         this.x = x < this.scene.camera.right ? x - this.scene.camera.right : x + this.scene.camera.left;
         this.y = y < this.scene.camera.top ? -y + this.scene.camera.top : -y - this.scene.camera.bottom;
         this.size = Math.random() * 5 + 1;
@@ -26,7 +23,6 @@ export class Particle {
     }
 
     draw() {
-        // const particleObject = this.addParticle();
         this.scene.light.target = this.createdParticle;
     }
 
