@@ -4,12 +4,13 @@ import {Vector3} from "/node_modules/three/src/math/Vector3.js";
 import {LineBasicMaterial} from "/node_modules/three/src/materials/LineBasicMaterial.js";
 import {BufferGeometry} from "/node_modules/three/src/core/BufferGeometry.js";
 import {Line} from "/node_modules/three/src/objects/Line.js"
+import {CircleTexture} from "./src/circle-texture.js";
 
 //init scene
 const canvasContainer = document.querySelector("#canvas-container");
 const rect = canvasContainer.getBoundingClientRect();
-const cameraLocation = {z: 5,  viewWidth: rect.width, viewHeight: rect.height}
-const rendererParameters = {antialias: true} // see WebGLRendererParameters
+const cameraLocation = {z: 5,  viewWidth: rect.width, viewHeight: rect.height};
+const rendererParameters = {antialias: true, autoClear: false}; // see WebGLRendererParameters
 const lightProperties = {
     x: 5,
     y: 5,
@@ -23,26 +24,27 @@ const mouseHandler = {
 }
 const particles = [];
 let hue = 0;
-const lineMaterial = new LineBasicMaterial({color: 'hsl(' + hue + ', 100%, 50%)'});
-
 
 const sceneObj = initialize(cameraLocation, rendererParameters, lightProperties, canvasContainer);
+const circleTexture = new CircleTexture();
+console.log(circleTexture);
 
+// mouse click event
 sceneObj.renderer.domElement.addEventListener('click', async function (event) {
     mouseHandler.x = event.x;
     mouseHandler.y = event.y;
-    for (let i = 0; i < 10; i++) {
-        const particle = new Particle(sceneObj, mouseHandler.x, mouseHandler.y, hue);
+    for (let i = 0; i < 100; i++) {
+        const particle = new Particle(sceneObj, mouseHandler.x, mouseHandler.y, hue++, circleTexture.renderTarget.texture);
         particles.push(particle.addParticle());
-        particle.draw();
     }
 });
 
+// mousemove event
 sceneObj.renderer.domElement.addEventListener('mousemove', async function (event) {
     mouseHandler.x = event.x;
     mouseHandler.y = event.y;
     for (let i = 0; i < 3; i++) {
-        const particle = new Particle(sceneObj, mouseHandler.x, mouseHandler.y, hue);
+        const particle = new Particle(sceneObj, mouseHandler.x, mouseHandler.y, hue, circleTexture.renderTarget.texture);
         particles.push(particle.addParticle());
     }
 });
@@ -50,7 +52,6 @@ sceneObj.renderer.domElement.addEventListener('mousemove', async function (event
 function particlesHandler() {
     for (let i = 0; i < particles.length; i++) {
         particles[i].update();
-        particles[i].draw();
 
         //connecting particles if they are within a certain range of each other
         // for (let j = i; j < particles.length; j++) {
@@ -67,7 +68,7 @@ function particlesHandler() {
         //     }
         // }
 
-        if (particles[i].size <= 0.3) {
+        if (particles[i].createdParticle.scale.x <= 0.2) {
             sceneObj.scene.remove(particles[i].createdParticle);
             particles.splice(i, 1);
             i--;
@@ -80,6 +81,11 @@ const animate = () => {
 
     particlesHandler();
     hue++;
+    sceneObj.renderer.setClearColor(0x000000, 0);
+    sceneObj.renderer.setRenderTarget(circleTexture.renderTarget);
+    sceneObj.renderer.render(circleTexture.scene, circleTexture.camera);
+    sceneObj.renderer.setRenderTarget(null);
+
     sceneObj.renderer.render(sceneObj.scene, sceneObj.camera);
 }
 
