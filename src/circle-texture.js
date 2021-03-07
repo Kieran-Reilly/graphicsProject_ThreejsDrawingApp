@@ -75,7 +75,7 @@ export class CircleTexture {
             x: 0,
             y: 0,
             radius: 5,
-            segments: 20,
+            segments: 32,
             colour: 0xffffff
         }
 

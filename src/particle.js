@@ -10,7 +10,7 @@ export class Particle {
             this.scene = sceneObj;
             this.x = x < this.scene.camera.right ? x - this.scene.camera.right : x + this.scene.camera.left;
             this.y = y < this.scene.camera.top ? -y + this.scene.camera.top : -y - this.scene.camera.bottom;
-            this.size = Math.random() * 50 + 10;
+            this.size = Math.random() * 200 + 50;
             this.speedX = Math.random() * 3 - 1.5;
             this.speedY = Math.random() * 3 - 1.5;
             this.colour = 'hsl(' + colour + ', 100%, 50%)';
@@ -28,7 +28,7 @@ export class Particle {
             return this;
     }
 
-    update() {
+    async update() {
         this.createdParticle.position.x += this.speedX;
         this.createdParticle.position.y += this.speedY;
         if (this.createdParticle.scale.x > 0.1) {

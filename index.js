@@ -33,7 +33,7 @@ console.log(circleTexture);
 sceneObj.renderer.domElement.addEventListener('click', async function (event) {
     mouseHandler.x = event.x;
     mouseHandler.y = event.y;
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 1; i++) {
         const particle = new Particle(sceneObj, mouseHandler.x, mouseHandler.y, hue++, circleTexture.renderTarget.texture);
         particles.push(particle.addParticle());
     }
@@ -43,13 +43,13 @@ sceneObj.renderer.domElement.addEventListener('click', async function (event) {
 sceneObj.renderer.domElement.addEventListener('mousemove', async function (event) {
     mouseHandler.x = event.x;
     mouseHandler.y = event.y;
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 10; i++) {
         const particle = new Particle(sceneObj, mouseHandler.x, mouseHandler.y, hue, circleTexture.renderTarget.texture);
         particles.push(particle.addParticle());
     }
 });
 
-function particlesHandler() {
+async function particlesHandler() {
     for (let i = 0; i < particles.length; i++) {
         particles[i].update();
 
@@ -79,11 +79,11 @@ function particlesHandler() {
 const animate = () => {
     requestAnimationFrame(animate);
 
-    particlesHandler();
+    // particlesHandler();
     hue++;
     sceneObj.renderer.setClearColor(0x000000, 0);
     sceneObj.renderer.setRenderTarget(circleTexture.renderTarget);
-    sceneObj.renderer.render(circleTexture.scene, circleTexture.camera);
+    sceneObj.renderer.render(circleTexture.scene, circleTexture.camera, );
     sceneObj.renderer.setRenderTarget(null);
 
     sceneObj.renderer.render(sceneObj.scene, sceneObj.camera);
